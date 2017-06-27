@@ -1,0 +1,544 @@
+/*anj*/
+/*body {
+	
+	position: relative;
+	background: -webkit-linear-gradient(black, #606060);
+	background: -o-linear-gradient(black, #606060);
+	background: -moz-linear-gradient(black, #606060);
+	background: linear-gradient(#0D182D, #414856);
+	--background: linear-gradient(#414856, #0D182D);
+}*/
+
+
+body{
+    font-family: "Times New Roman";
+    position:relative;
+    background:url(http://subtlepatterns2015.subtlepatterns.netdna-cdn.com/patterns/footer_lodyas.png);
+    -webkit-animation:100s scroll infinite linear;
+    -moz-animation:100s scroll infinite linear;
+    -o-animation:100s scroll infinite linear;
+    -ms-animation:100s scroll infinite linear;
+    animation:100s scroll infinite linear;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+	overflow-x:hidden;
+}
+
+@-webkit-keyframes scroll{
+  100%{
+    background-position:0px -3000px;
+  }
+}
+
+@-moz-keyframes scroll{
+  100%{
+    background-position:0px -3000px;
+  }
+}
+
+@-o-keyframes scroll{
+  100%{
+    background-position:0px -3000px;
+  }
+}
+
+@-ms-keyframes scroll{
+  100%{
+    background-position:0px -3000px;
+  }
+}
+
+@keyframes scroll{
+  100%{
+    background-position:0px -3000px;
+  }
+}
+/*anj*/
+
+#post_container{
+	position: relative;
+	left: 20px;
+	top: 110px;
+	width: 430px;
+	height: 430px;
+	transition: left 0.5s ease;	
+	background-color: #A0A0A0;
+	opacity: 0.9;
+    border-radius: 4px;
+    box-shadow: 
+        0 2px 1px 0 rgba(255,255,255,0.4) inset,
+        0 6px 15px 2px rgba(0,0,0,0.5);
+
+}
+
+.post_InContainer{
+	position: relative;
+	top: 10px;
+	left: 10px;
+	width: 420px;
+	height: 400px;
+	overflow-y:scroll;
+	
+}
+
+.disable-hover{
+	cursor: none;
+}
+
+
+.post_item_container{
+	font-family: Sans-serif;
+	font-weight: bold;
+	position:relative;
+	margin: 0px;
+	height: 60px;
+	width: post_container.width;
+	background: white;
+	font-size: 12px;
+	border: 2px black solid;
+}
+
+.post_item_container:hover{
+	cursor: pointer;
+}
+
+
+.post_item_userdp{
+	position: relative;
+	top: 2px;
+	left: 10px;
+	height:55px;
+	width: 55px;
+	border-radius: 100%;
+	background: black;
+	display:inline-block;
+	float: left;
+}
+
+.post_item_name{
+	position: relative;
+	top: 10px;
+	left: 30px;
+	color:black;
+	height:15px;
+	width:100px;
+	float:left;
+}
+
+
+
+.post_item_title{
+	position: relative;
+	font-size: 11px;
+	top: 13px;
+	left: 40px;
+	height: 30px;
+	width: 290px;
+	display: inline-block;
+	word-break: normal;
+	float: left;
+	
+}
+
+#main_container{
+	position: absolute;
+	top: 170px;
+	left: 485px;
+	height: 0px;
+	width: 5px;
+	background-color: #A0A0A0;
+	opacity: 0.9;
+    border-radius: 4px;
+    box-shadow: 
+        0 2px 1px 0 rgba(255,255,255,0.4) inset,
+        0 6px 15px 2px rgba(0,0,0,0.5);
+    overflow: hidden;
+	transition: height 0.5s ease, width 0.5s ease 0.5s, left 0.5s ease;
+	font-family: Sans-serif;
+	font-weight: bold;
+}
+
+
+.userName{
+	position: relative;
+	top: 10px;
+	left: -125px;
+	height: 28px;
+	width: auto;
+	font-size: 16px;
+	opacity: 0;
+	z-index: 1;
+	transition: top 0.5s ease, left 0.5s ease, font-size 0.5s ease, opacity 0.5s ease 1s;
+	float: left;
+}
+
+
+.post_complete_dp{
+	position: relative;
+	top: 15px;
+	left: 30px;
+	height:150px;
+	width: 150px;
+	border-radius: 100%;
+	background: black;
+	opacity: 0;
+	transition: opacity 1s ease;
+	transition-delay: 1s;
+	float: left;
+}
+
+.post_complete_item{
+	position: relative;
+	height: 400px;
+	width: 420px;
+	margin: 15px;
+	font-family: Sans-serif;
+	font-weight: bold;
+	opacity: 0;
+	transition: opacity 1s ease;
+}
+
+.line{
+	position:relative;
+	background: black;
+	top: 165px;
+	opacity: 0;
+	height: 2px;
+	width: 0px;
+	transition: width 0.5s ease, opacity 1s ease;
+}
+
+.post_complete_content{
+	position: relative;
+	top: -120px;
+	left: 10px;
+	width: 400px;
+	opacity: 1;
+	transition: top 0.5s ease, left 0.5s ease;
+	font-size: 13px;
+	float: left;
+}
+
+#PROFILE{
+	opacity: 0;
+	font-family: Sans-serif;
+	font-size: 16px;
+	transition: opacity 1s ease 1.5s;
+}
+
+.full_profile{
+	position: relative;
+	top: -350px;
+	left: 232px;
+}
+
+/*anj*/
+.full_contact{
+    position: relative;
+    top: -320px;
+    left: 20px;
+    height: 180px;
+    width: 780px;
+}
+
+.contact{
+    color:black;
+    font-weight:bold;
+    text-align: left;
+    vertical-align: text-top;
+}
+/*anj*/
+
+#ALBUM{
+	position: absolute;
+	top: 170px;
+	left: 870px;
+	height: 0px;
+	width: 5px;
+	background-color: #A0A0A0;
+	opacity: 0;
+    border-radius: 4px;
+    box-shadow: 
+        0 2px 1px 0 rgba(255,255,255,0.4) inset,
+        0 6px 15px 2px rgba(0,0,0,0.5);
+    overflow: hidden;
+	transition: height 0.5s ease, width 0.5s ease 0.5s, opacity 0.5s ease;
+	font-family: Sans-serif;
+}
+
+
+.albumsTitle{
+	position: relative;
+	top: 150px;
+	left: 30px;
+	opacity: 0;
+	font-family: Sans-serif;
+	font-size: 36px;
+	font-weight: bold;
+	text-align: center;
+	float:left;
+}
+
+.albumsLine{
+	position: relative;
+	background: black;
+	top: 25px;
+	left: 10px;
+	height: 2px;
+	width: 0px;
+	opacity: 0;
+	float: left;
+}
+
+.albumsContainer{
+	position: relative;
+	top: 40px;
+	left: 10px;
+	--border: 1px black solid;
+	visibility: hidden;
+	height: 320px;
+	width: 780px;
+	overflow: auto;
+	
+}
+
+#albumTable{
+	opacity: 0;
+	transition: opacity 0.5s ease 1s;
+}
+
+#MYPOSTS{
+	position: absolute;
+	top: 170px;
+	left: 1100px;
+	height: 0px;
+	width: 5px;
+	background-color: #A0A0A0;
+	opacity: 0;
+    border-radius: 4px;
+    box-shadow: 
+        0 2px 1px 0 rgba(255,255,255,0.4) inset,
+        0 6px 15px 2px rgba(0,0,0,0.5);
+	transition: height 0.5s ease, width 0.5s ease 0.5s opacity 0.5s ease;
+	font-family: Sans-serif;
+}
+
+#myPostsContainer{
+	position: relative;
+	top: 30px;
+	left: 10px;
+	height: 330px;
+	width: 780px;
+	overflow-y: auto;
+	opacity: 0;
+}
+
+.myPostsTitle{
+	position: relative;
+	top: 150px;
+	left: 0px;
+	opacity: 0;
+	font-family: Sans-serif;
+	font-size: 36px;
+	font-weight: bold;
+	text-align: center;
+}
+
+.myPostsLine{
+	position: relative;
+	background: black;
+	top: 25px;
+	left: 10px;
+	height: 2px;
+	width: 0px;
+	opacity: 0;
+	float: left;
+}
+
+#PHOTOS{
+	opacity: 0;
+	font-family: Sans-serif;
+}
+
+.photos_Title{
+	position: relative;
+	top: -615px;
+	left: 20px;
+	font-size: 24px;
+}
+
+.photosLine{
+	position: relative;
+	background: black;
+	top: -610px;
+	left: 10px;
+	height: 2px;
+	width: 0px;
+}
+
+.photosContainer{
+	position: relative;
+	top: -600px;
+	left: 5px;
+	height: 600px;
+	width: 485px;
+	overflow: auto;
+	opacity: 1;
+}
+
+#photo_info{	
+	position: absolute;
+	top: 170px;
+	left: 520px;
+	height: 0px;
+	width: 5px;
+	background-color: #A0A0A0;
+	opacity: 1;
+    border-radius: 4px;
+    box-shadow: 
+        0 2px 1px 0 rgba(255,255,255,0.4) inset,
+        0 6px 15px 2px rgba(0,0,0,0.5);
+    overflow: hidden;
+	transition: height 0.5s ease, width 0.5s ease 0.5s opacity 0.5s ease;
+	font-family: Sans-serif;
+	font-weight: bold;
+}
+
+.photo_img{
+	position: relative;
+	top: 30px;
+	left: 20px;
+	height:600px;
+	width: 600px;
+	--border-radius: 100%;
+	background: black;
+	opacity: 0;
+	transition: opacity 1s ease 1s;
+	float: left;
+}
+
+.photo_name{
+	position: relative;
+	top: 30px;
+	left: 40px;
+	opacity: 0;
+	font-size: 16px;
+	word-break: normal;
+}
+
+.photo_uploader{
+	position: relative;
+	top: 50px;
+	left: 40px;
+	opacity: 0;
+	font-size: 16px;
+	word-break: normal;
+}
+
+.photo_album{
+	position: relative;
+	top: 70px;
+	left: 40px;
+	opacity: 1;
+	font-size: 16px;
+	word-break: normal;
+}
+
+.profile_dp{
+	position: relative;
+	top: 10px;
+	left: 130px;
+	height:150px;
+	width: 150px;
+	border-radius: 100%;
+	background: black;
+	opacity: 1;
+	transition: opacity 1s ease;
+	transition-delay: 1s;
+}
+
+.menu_bar{
+	position: absolute;
+	background: #225CC6;
+	top:-8px;
+	left: -8px;
+}
+
+.menu_btn{
+	border-radius: 4px;
+	position:relative;
+	border: 1px;
+	height: 52px;
+	width: 240px;
+	padding: 0px;
+	text-transform: uppercase;
+	font-family: Sans-serif;
+	font-weight: bold;
+	color:black;
+	background-color: #A0A0A0;
+	transition: background 0.25s ease, box-shadow 0.2s ease-in-out;
+}
+
+.menu_btn:hover {
+	background: -webkit-linear-gradient(center top, #4387fd, #4683ea);
+	box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+input[type=text]{
+	position: relative;
+	width: 200px;
+	box-sizing: border-box;
+	border-radius: 4px;
+	font-size: 16px;
+    background-color: white;
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    transition: width 0.4s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+input[type=text]:hover {
+    width: 63.7%;
+	box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.menu_btn_container{
+	position:absolute;
+	height: 36px;
+	width: 180px;
+	border: 1px black solid;
+	background-color:#225CC6;
+	float: left;
+	--background: linear-gradient(#355285, #0E2857);
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+ 
+::-webkit-scrollbar-track-piece {
+    ---webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 6px;
+}
+ 
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+
+#showMore {
+    width: 100%;
+    font-weight:bold;
+    background-color: white;
+    color: black;
+    border: 2px solid #e7e7e7;
+    transition: background-color 0.3s ease;
+    box-shadow: 
+        0 2px 1px 0 rgba(255,255,255,0.4) inset,
+        0 6px 15px 2px rgba(0,0,0,0.5);
+}
+
+#showMore:hover {
+    background-color: #e7e7e7;
+}

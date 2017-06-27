@@ -1,1 +1,925 @@
-Trap Card!!! ACTIVATED!!!
+<html>
+	<head>
+		<title>A20</title>
+		<script src="jquery-220min.js"></script>
+		<link rel = "stylesheet" type = "text/css" href = "mainStyle.css">
+	</head>
+	
+	<script>
+		//GARY START
+		var globalPosts;
+        var globalUser;
+		var globalAlbums;
+        var globalPhotos;
+        var globalX;
+        var globalPIndex;
+		$.ajax('http://jsonplaceholder.typicode.com/posts', {
+			method: 'GET'
+		}).then(function(posts) {
+			$.ajax('http://jsonplaceholder.typicode.com/users', {
+				method: 'GET'
+			}).then(function(users) {
+                globalPosts = posts;
+                globalUser = users;
+				for(var x = 0; x<10; x++){
+					var text = "<div value =\"" + posts[99 - x].id + "\">";
+					var container = $(text);
+					container.addClass("post_item_container");
+					container.val(posts[99 - x].id);
+					var userDP = $("<div>");
+					userDP.addClass("post_item_userdp");
+					var userName = $("<div>");
+					var y = posts[99 - x].userId - 1;
+					userName.html(users[y].username);
+					userName.addClass("post_item_name");
+					var title = $("<div>");
+					title.html(posts[99 - x].title);
+					title.addClass("post_item_title")
+					container.append(userDP);
+					container.append(userName);
+					container.append(title);
+					
+					$(".post_InContainer").append(container);
+				}
+                globalX = 10;
+                var showMore = $("<input type =\"button\" id=\"showMore\" value=\"Show More...\">");
+                $(".post_InContainer").append(showMore);
+				
+			});
+		});
+		
+		$.ajax('https://jsonplaceholder.typicode.com/albums', {
+            method: 'GET'
+        }).then(function(albums){
+            $.ajax('https://jsonplaceholder.typicode.com/photos', {
+                method: 'GET'
+            }).then(function(photos){
+                globalAlbums = albums;
+                globalPhotos = photos;
+            }); 
+        }); 
+		//GARY END
+		//JAROD START
+		$(document).ready(function (){
+			var perma = false;
+			var goTo = false;
+			var photos = false;
+			
+			/*	N = Normal
+				E = Extended
+				S = Short
+			*/
+			
+			var panel_NHeight = "400px";
+			var panel_NWidth = "420px";
+			var panel_EWidth = "820px";
+			var panel_SHeight = "60px";
+			
+			var id = 0;
+			var nId = 0;
+			
+			var profState = -1; //1 = Profile, 2 = Albums, 3 = MyPosts
+			
+			function makePosts() {
+				 globalPosts = posts;
+                globalUser = users;
+				for(var x = 0; x<10; x++){
+					var text = "<div value =\"" + posts[99 - x].id + "\">";
+					var container = $(text);
+					container.addClass("post_item_container");
+					container.val(posts[99 - x].id);
+					var userDP = $("<div>");
+					userDP.addClass("post_item_userdp");
+					var userName = $("<div>");
+					var y = posts[99 - x].userId - 1;
+					userName.html(users[y].username);
+					userName.addClass("post_item_name");
+					var title = $("<div>");
+					title.html(posts[99 - x].title);
+					title.addClass("post_item_title")
+					container.append(userDP);
+					container.append(userName);
+					container.append(title);
+					
+					
+					$("#myPostsContainer").append(container);
+				}
+                globalX = 10;
+                var showMore = $("<input type =\"button\" onclick=\"nextTenPosts()\" id=\"showMore\" value=\"Show More...\">");
+					$("#myPostsContainer").append(showMore);
+			}
+			
+			function getSnippet(){
+				var text = globalPosts[id].body;
+				var x = 0;
+				if(text.length >= 20){
+					text = "";
+					for(x=0; x<20; x++)
+						text += globalPosts[id].body[x];
+					text += "..."
+					$(".post_complete_content").html(text);
+				}
+				else $(".post_complete_content").html(text);
+			}
+            
+            function nextTwelvePhotos(){    
+                /*var elem = document.getElementById('showMoreP');
+                elem.parentNode.removeChild(elem);*/
+                $("#showMoreP").remove();
+                
+                var length = globalPIndex;
+                var row = $("<tr>");
+
+                for(var x = length; x<length+12; x++){
+                    if(x != 0 && x%3 == 0)
+                        row = $("<tr>");
+                    row.addClass("photosRow");
+                    var container = $("<td>");
+                    container.addClass("photosCol");
+                    var text = "<img src=\"" + globalPhotos[x].thumbnailUrl + "\" style=\"width:150px;height:150px;\">"
+                    image = $(text);
+                    image.addClass("photosThumb");
+                    container.append(image);
+                    row.append(container);
+                    $("#photosTable").append(row);
+                } 
+                globalPIndex = length;
+                if(globalPIndex<globalPhotos.length){
+                    var showMoreP = $("<input type =\"button\"  id=\"showMoreP\" value=\"Show More...\">");
+                    $("#photosTable").append(showMoreP);
+                }
+            }
+                          
+			
+			function addToTable(userId){
+                if(userId != -1){
+                    var row = $("<tr>");
+                    row.addClass("albumRow");
+                    var container; //x5 per 1 row
+                    var image; //x5 per 1 row
+					
+                    var AlIndex = [];
+
+                    for(var x = 0; x<globalAlbums.length; x++){
+
+                        if(userId == globalAlbums[x].userId){
+                            AlIndex.push(globalAlbums[x].id);
+                        }
+                    }
+                    var AlLength = AlIndex.length;
+                    for(var x = 0; x<AlLength; x++){
+                        var y = 0
+                        var bool = false;
+                        var url;
+                        while(!bool){
+                            if(globalPhotos[y].albumId == AlIndex[x]){
+                                url = globalPhotos[y].thumbnailUrl;
+                                
+                                bool = true;
+                            }
+                            y++;
+                        }
+                        container = $("<td>");
+                        container.addClass("albumCol");
+                        var text = "<img src=\"" + url + "\" style=\"width:150px;height:150px;\">"
+                        image = $(text);
+                        image.addClass("albumThumb");
+						image.val(globalAlbums[x].id);
+                        container.append(image);
+                        row.append(container);
+                    }
+                    $("#albumTable").append(row);
+                }
+                else{
+                    var length = globalPhotos.length;
+                    if(length>12)
+                        length = 12;
+                    var row = $("<tr>");
+                    
+                    for(var x = 0; x<length; x++){
+                        if(x != 0 && x%3 == 0)
+                            row = $("<tr>");
+                        row.addClass("photosRow");
+                        var container = $("<td>");
+                        container.addClass("photosCol");
+                        var text = "<img src=\"" + globalPhotos[x].thumbnailUrl + "\" style=\"width:150px;height:150px;\">"
+                        image = $(text);
+						image.val(globalPhotos[x].id);
+                        image.addClass("photosThumb");
+                        container.append(image);
+                        row.append(container);
+                        $("#photosTable").append(row);
+                    }
+                    globalPIndex = length;
+                    if(globalPIndex<globalPhotos.length){
+                        var showMoreP = $("<input type =\"button\"  id=\"showMoreP\" value=\"Show More...\">");
+                        
+                        $("#photosTable").append(showMoreP);
+                    }   
+                }
+                    
+            }
+            
+			/*anj*/
+			function revealSome() { 
+				if (!perma){
+					
+					id = $(this).val() - 1;
+                    var obj = globalUser[globalPosts[id].userId - 1];
+                    
+					$(".userName").html(obj.username);
+                    $(".full_profile").html("<br>" + obj.name + "<br>" + obj.email + "<br>" + obj.phone + "<br>" + obj.website);
+                    $("#address").html("Address:" + "<br> " + obj.address.street + "<br> " + obj.address.suite + "<br> " + obj.address.city + "<br> " + obj.address.zipcode)
+                    $("#company").html("Company:" + "<br> " + obj.company.name + "<br> " + obj.company.catchphrase + "<br> " + obj.company.bs)
+                    
+					getSnippet();
+					$(this).css("background", "yellow");
+					$("#main_container").css({"height": panel_SHeight, "width": panel_NWidth, "transition": "height 0.5s ease, width 0.5s ease 0.5s"});
+					$(".post_complete_item").css({"opacity": "1", "transition": "opacity 0.5s ease 1s"});
+					$(".userName").css({"opacity": "1"});
+				}
+			}
+            /*anj*/
+
+			function revealAll() {
+				$("#main_container").css({"height": panel_NHeight, "width": panel_NWidth, "transition-delay": "0s"});
+				$(".post_complete_item").css({"opacity": "1", "transition-delay": "0.5s"});
+				
+				//Move Text to Reveal All
+				var dp = $(".post_complete_dp");
+				var name = $(".userName");
+				var content = $(".post_complete_content");
+				var line = $(".line");
+				
+				
+				dp.css({"opacity": "1",  "transition": "opacity 1s ease", "transition-delay": "1s"});
+				name.css({"top": "75px", "left": "55px", "font-size": "24px", "transition": "top 0.5s ease 0s, left 0.5s ease 0s, font-size 0.5s ease 0s"});
+				line.css({"opacity": "1", "width": "390px",  "transition": "width 0.5s ease 0.5s, opacity 1s ease 0.5s"});
+				content.css({"top": "35px", "left": "0px"});
+			}
+
+			function hideAll() {
+				if (!perma || goTo){
+					$(this).css("background", "white");
+					$("#main_container").css({"height": "0px", "width": "5px", "transition": "height 0.5s ease 1s, width 0.5s ease 0.5s"});
+					$(".userName").css({"opacity": "0", "transition": "opacity 0.5s ease"});
+					$(".post_complete_item").css({"opacity": "0", "transition": "opacity 0.5s ease"});				
+				}
+			}
+
+			function hideSome() {
+				if (!perma || goTo){
+
+					getSnippet();
+					
+					$("#main_container").css({"height": panel_SHeight, "width": panel_NWidth, "transition-delay": "0s"});
+					$(".post_complete_item").css({"opacity": "1", "transition-delay": "0.5s"});		
+					
+					<!--Move Text to Hide Some-->
+					var dp = $(".post_complete_dp");
+					var name = $(".userName");
+					var content = $(".post_complete_content");
+					var line = $(".line");
+					
+					dp.css({"opacity": "0", "transition": "opacity 0.2s ease", "transition-delay": "0s"})
+					name.css({"top": "10px", "left": "-125px", "font-size": "16px", "transition-delay": "0s"});
+					line.css({"opacity": "0", "width": "0px", "transition": "width 0.1s ease 0s, opacity 1s ease 0s"})
+					content.css({"top": "-120px", "left": "10px", "transition": "top 0.5s ease, left 0.5s ease"});
+				}
+			}
+			
+			function showProfile(){
+				$(".line").css({"width": "780px", "opacity": "1", "transition": "width 0.5s ease 1s, opacity 0.5s ease 1s"});
+				$("#main_container").css({"width": "840px", "left": "10px", "transition": "width 0.5s ease 0.5s, left 0.5s ease 0.5s"});
+				$(".userName").css({"top": "45px", "left": "80px"});
+				$("#PROFILE").css({"opacity": "1", "transition": "opacity 1s ease 1.5s"});
+			}
+			
+			function hideProfile(){
+				$("#PROFILE").css({"opacity": "0", "transition": "opacity 0.5s ease 0s"});
+				$("#main_container").css({"width": "210px", "transition": "width 0.5s ease 0.5s"});
+				$(".line").css({"width": "0px", "opacity": "0", "transition": "width 0.5s ease 0s, opacity 0.5s ease 0s"});
+				$(".userName").css({"top": "50px", "left": "20px", "text-align": "center", "transition": "top 0.5s ease 0.5s, left 0.5s ease 0.5s, text-align 0.5s ease 0.5s"});
+			}
+			
+			function showAlbum(){
+				
+				var userNum = globalPosts[id].userId - 1;
+				addToTable(userNum);
+                
+				$("#ALBUM").css({"left": "250px", "width": panel_EWidth, "transition": "left 0.5s ease 0s, width 0.5s ease 0s"});
+				$(".albumsTitle").css({"top": "20", "left": "30px", "opacity": "1", "font-size": "24px", "transition": "top 0.5s ease 0.5s, left 0.5s ease 0.5s, font-size 0.5s ease 0.5s, opacity 0.5s ease 0.5s"});
+				$(".albumsLine").css({"width": "780px", "opacity": "1", "transition": "width 0.5s ease 1s, opacity 0.5s ease 1s"});
+				$(".albumsContainer").css({"visibility": "visible"});
+				$("#albumTable").css({"opacity": "1", "transition": "opacity 0.5s ease 1s"});
+			}
+			
+			function hideAlbum(){
+				$(".albumsTitle").css({"top": "150px", "left": "50px", "font-size": "36px", "transition": "top 0.5s ease 0.5s, left 0.5s ease 0.5s, font-size 0.5s ease 0.5s"})
+				$(".albumsLine").css({"width": "0px", "opacity": "0", "transition": "width 0.5s ease 0s, opacity 0.5s ease 0s"});
+				$("#albumTable").css({"opacity": "0", "transition": "opacity 0.5s ease 0s"});
+				if (profState == 1){
+					$("#ALBUM").css({"left": "870px", "width": "210px", "transition": "left 0.5s ease 0.5s, width 0.5s ease 0.5s"});
+				} else if (profState == 3){
+					$("#ALBUM").css({"width": panel_EWidth, "transition": "width 0.5s ease 0.5s"});
+				} else if (profState == 2){
+					$("#ALBUM").css({"left": "240px", "width": "210px", "transition": "left 0.5s ease 0.5s, width 0.5s ease 0.5s"})
+				}
+				setTimeout(function(){
+					$("#albumTable").css({"visiblity": "hidden"});
+					$(".albumRow").remove();
+				}, 500);
+			}
+			
+			function moveAlbumLeft(){
+				$("#ALBUM").css({"left": "240px", "transition": "left 0.5s ease 0.5s"});
+			}
+			
+			function moveAlbumRight(){
+				$("#ALBUM").css({"left": "870px", "transition": "left 0.5s ease 0.5s"});
+			}
+			
+			function showMyPosts(){
+				$("#MYPOSTS").css({"width": panel_EWidth, "left": "470px", "transition": "width 0.5s ease 0s, left 0.5s ease 0s"});
+				$(".MyPostsTitle").css({"top": "20", "left": "-320px", "opacity": "1", "font-size": "24px", "transition": "top 0.5s ease 0.5s, left 0.5s ease 0.5s, font-size 0.5s ease 0.5s, opacity 0.5s ease 0.5s"});
+				$(".myPostsLine").css({"width": "780px", "opacity": "1", "transition": "width 0.5s ease 1s, opacity 0.5s ease 1s"});
+				$("#myPostsContainer").css({"opacity": "1", "transition": "opacity 0.5s ease 0.5s"});
+			}
+			
+			function hideMyPosts(){
+				$(".myPostsTitle").css({"top": "150px", "left": "0px", "font-size": "36px", "transition": "top 0.5s ease 0.5s, left 0.5s ease 0.5s, font-size 0.5s ease 0.5s"})
+				$(".myPostsLine").css({"width": "0px", "opacity": "0", "transition": "width 0.5s ease 0s, opacity 0.5s ease 0s"});
+				$("#myPostsContainer").css({"opacity": "0", "transition": "opacity 0.5s ease 0s"});
+				$("#MYPOSTS").css({"width": "210px", "left": "1100px", "transition": "width 0.5s ease 0.5s, left 0.5s ease 0.5s"});
+			}
+			
+			function hidePostContainer() {
+				$(".post_item_container").css({"background": "white"});
+				$("#post_container").css({"left": "-500px"})
+			}
+			
+			function showPostContainer(){
+				$("#post_container").css({"left": "20px", "transition": "left 0.5s ease 1s"});
+			}
+			
+			function goToProfile() {
+				
+				if (profState == 0){
+					
+					perma = false;
+					
+					$(".post_complete_content").css({"opacity": "0", "transition": "opacity 0.5s ease"})
+					hidePostContainer();
+					showProfile();
+					$("#ALBUM").css({"opacity": "0.9", "height": panel_NHeight, "width": "210px", "transition": "height 0.5s ease 1s, width 0.5s ease 1.5s, opacity 0.5s ease 1s"});
+					$("#MYPOSTS").css({"opacity": "0.9",  "height": panel_NHeight, "width": "210px", "transition": "height 0.5s ease 1s, width 0.5s ease 1.5s, opacity 0.5s ease 1s"});
+					$(".albumsTitle").css({"opacity": "1", "transition": "opacity 0.5s ease 2s"});
+					$(".myPostsTitle").css({"opacity": "1", "transition": "opacity 0.5s ease 2s"});
+				} else if (profState == 2){
+					profState = 1;
+					hideAlbum();
+					showProfile();
+				} else if (profState == 3){
+					profState = 1;
+					hideMyPosts();
+					moveAlbumRight();
+					showProfile();
+				}
+				profState = 1;
+			}
+			
+			function goToAlbums() {
+				if (profState == 1){
+					hideProfile();
+					setTimeout(showAlbum, 500)
+					profState = 2;
+				} else if (profState == 3){
+					hideMyPosts();
+					setTimeout(showAlbum, 500);
+					profState = 2;
+				}
+				
+			}
+            
+            //BY gary JAROD STYLE THIS
+            function postPoster(userId){
+                var row = $("<tr>");
+                row.addClass("albumRow");
+                var container; //x5 per 1 row
+                var image; //x5 per 1 row
+
+                for(var x = 0; x<globalPosts.length; x++){
+                    if(userId == globalPosts[x].userId){
+                        var text = "<div value =\"" + globalPosts[x].id + "\">";
+                        var container = $(text);
+                        container.addClass("selfPost_container");
+                        container.val(globalPosts[x].id);
+                        var title = $("<div>");
+                        title.html("Title: " + globalPosts[x].title);
+                        title.addClass("selfPost_title")
+                        container.append(title);
+                        var body = $("<div>");
+                        body.html("<br>" + globalPosts[x].body);
+                        body.addClass("selfPost_body");
+                        
+                        container.append(body);
+                        container.append("<br>");
+
+                        $("#myPostsContainer").append(container);
+                    }
+                }
+            }
+			
+			function goToMyPosts() {
+				if (profState == 1){
+                    var userNum = globalPosts[id].userId - 1;
+                    postPoster(userNum);
+					hideProfile();
+					moveAlbumLeft();
+					setTimeout(showMyPosts, 500);
+					profState = 3;
+				} else if (profState == 2){
+					var userNum = globalPosts[id].userId - 1;
+                    postPoster(userNum);
+					hideAlbum();
+					setTimeout(showMyPosts, 500);
+					profState = 3;
+				}
+			}
+			
+			function hideDP() {
+				$(".post_complete_dp").css({"opacity": "0"});
+			}
+			
+			function hidePhotoContainer(){
+				$("#main_container").css({"opacity": "0", "width": "5px", "height": "0px", "transition": "height 0.5s ease 0.5s, width 0.5s ease 0s, opacity 0.5s ease 0.5s"});
+			}
+			
+			function hideAllProfile(){
+				
+				hideAlbum();
+					
+				hideProfile();
+			
+				hideMyPosts();
+				
+				$("#main_container").css({"opacity": "0", "width": "5px", "height": panel_SHeight, "transition": "height 0.5s ease 0s, width 0.5s ease 0.5s, opacity 0.5s ease 0.5s"});
+				$("#ALBUM").css({"opacity": "0", "width": "5px", "height": panel_SHeight, "transition": "height 0.5s ease 0s, width 0.5s ease 0.5s, opacity 0.5s ease 0.5s"});
+				$("#MYPOSTS").css({"opacity": "0", "width": "5px", "height": panel_SHeight, "transition": "height 0.5s ease 0s, width 0.5s ease 0.5s, opacity 0.5s ease 0.5s"});
+				hideDP();
+				$("#PROFILE").css({"opacity": "0", "transition":"opacity 0s ease 0s"});
+				$(".post_complete_dp").css({"opacity": "0", "transition":"opacity 0s ease 0s"});
+				$(".post_complete_content").css({"opacity": "0", "transition":"opacity 0s ease 0s"});
+				$(".userName").css({"opacity": "0", "transition":"opacity 0.5s ease 0s"});
+			}
+			
+			function resetToHome(){
+				$("#main_container").css({"left": "485px", "opacity": "0.9", "height": "0px"});
+				$(".userName").css({"top": "10px", "left": "-125px", "font-size": "16px", "transition": "top 0.5s ease, left 0.5s ease, font-size 0.5s ease, opacity 0.5s ease 1s"})
+				$(".post_complete_item").css({"opacity": "0"});
+				$(".post_complete_content").css({"top": "-120px", "left": "10px", "opacity": "1"});
+				$("#post_container").css({"transition": "left 0.5s ease"});
+				$("#ALBUM").css({"left": "870px"});
+				$(".albumsTitle").css({"opacity": "0"});
+				$(".myPostsTitle").css({"opacity": "0"});
+				$("#MYPOSTS").css({"left": "1100px"});
+				
+			}
+			
+			function goToHome(){
+				if (profState != -1){
+					id = 0;
+					hideAllProfile();
+					showPostContainer();
+					setTimeout(resetToHome, 1000);
+					profState = -1;
+					perma = false;
+				} else if (photos == true){
+					id = 0;
+					showPostContainer();
+					setTimeout(resetToHome, 1000);
+					profState = -1;
+					perma = false;
+					photos = false;
+				}
+			}
+			
+			function goToPhotos() {
+				if (!photos){
+                    addToTable(-1);
+					if (profState == -1){
+						goTo = true;
+						hidePostContainer();
+						hideAll();
+						goTo = false;
+						hideDP();
+					} else {
+						hideAllProfile();
+						profState = -1;
+					}
+					photos = true;
+					setTimeout(function() {
+						resetToHome();
+						$("#main_container").css({"opacity": "1", "height": "670px", "width": "495px", "left": "10px", "transition": "height 0.5s ease 0s, width 0.5s ease 0.5s, left 0.5s ease 0.5s, opacity 0.5s ease 0s"});
+						$("#PHOTOS").css({"opacity": "1", "transition": "opacity 0.5s ease 1s"});
+						$(".photosLine").css({"width": "460px", "transition": "width 0.5s ease 1.5s"});
+					}, 1000);
+				}
+			}
+			
+			function hoverUser(){
+				if (profState == -1){
+					$(".userName").css({"cursor": "pointer", "text-decoration": "underline", "color": "blue"});
+				} 
+			}
+			
+			function hoverUserOut(){
+				$(".userName").css({"cursor": "auto", "text-decoration": "none", "color": "black"});
+			}
+			
+			function hoverOnPhoto(){
+				$(".photosThumb").css({"cursor": "pointer"});
+			}
+			
+			function hoverOutPhoto() {
+				$(".photosThumb").css({"cursor": "auto"});
+			}
+			
+			function hidePhotoInfo(){
+				var photo = $("#photo_info");
+				var img = $(".photo_img");
+				var title = $(".photo_name");
+				var name = $(".photo_uploader");
+				var album = $(".photo_album");
+				
+				photo.css({"height": "0px", "width": "5px", "opacity": "0", "transition": "height 0.5s ease 0.5s, width 0.5s ease 0s, opacity 0.5s ease 0.5s"});
+				img.css({"opacity": "0", "transition": "opacity 0.5s ease 0s"})
+				title.css({"opacity": "0", "transition": "opacity 0.5s ease 0s"})
+				name.css({"opacity": "0", "transition": "opacity 0.5s ease 0s"})
+				album.css({"opacity": "0", "transition": "opacity 0.5s ease 0s"})
+			}
+			
+			function displayPhotoInfo() {
+				if (photos){
+					var obj;
+					for (var i = 0; i < globalPhotos.length; i++) {
+						if (globalPhotos[i].id == $(this).val())
+							obj = globalPhotos[i];
+					}
+					var photo = $("#photo_info")
+					var img = $(".photo_img");
+					var title = $(".photo_name");
+					title.html("Title: " + obj.title);
+					var album = $(".photo_album");
+					var tempObj;
+					for (var i = 0; i < globalAlbums.length; i++) {
+						if (globalAlbums[i].id == obj.albumId) {
+							tempObj = globalAlbums[i];
+							album.html("Album: " + tempObj.title);
+						}
+					}
+					var name = $(".photo_uploader");
+					console.log(name);
+					for (var x = 0; x < globalUser.length; x++) {
+						console.log("OUT");
+						if (globalUser[x].id == tempObj.userId){	
+							console.log("IN");
+							name.html("Uploader: " + globalUser[x].username);
+						}
+					}
+					
+					photo.css({"height": "670px", "width": "800px", "opacity": "1", "transition": "height 0.5s ease 0s, width 0.5s ease 0.5s, opacity 0.5s ease 0s"});
+					img.css({"background": "url(" + obj.url + ") 0 0", "opacity": "1", "transition": "opacity 0.5s ease 1s"})
+					title.css({"opacity": "1", "transition": "opacity 0.5s ease 1s"})
+					name.css({"opacity": "1", "transition": "opacity 0.5s ease 1s"})
+					album.css({"opacity": "1", "transition": "opacity 0.5s ease 1s"})
+				}
+			}
+            
+			function hoverProfile(){
+				var profile = $("#main_container");
+				
+				if (profState != 1)
+					profile.css({"cursor": "pointer"});
+			}
+			
+			function hoverOutProfile(){
+				var profile = $("#main_container");
+				
+				profile.css({"cursor": "auto"});
+			}
+			
+            function hoverAlbum(){
+				var album = $("#ALBUM");
+				if (profState != 2)
+					album.css({"cursor": "pointer"});
+			}
+			
+			function hoverOutAlbum(){
+				var album = $("#ALBUM");
+				
+				album.css({"cursor": "auto"});
+			}
+			
+			function hoverPosts(){
+				var posts = $("#MYPOSTS");
+				
+				if (profState != 3)
+					posts.css({"cursor": "pointer"});
+			}
+			
+			function hoverOutPosts(){
+				var posts = $("#MYPOSTS");
+				
+				posts.css({"cursor": "pointer"});
+			}
+			
+			function PhotoTableInAlbum(albumId){
+				var userID = globalPosts[id].userId - 1;
+				console.log()
+				var table = $("<table id =\"albumPics\">")
+				var row = $("<tr>");
+				row.addClass("albumRow");
+				var container; //x5 per 1 row
+				var image; //x5 per 1 row
+				
+				var AlIndex = [];
+
+				for(var x = 0; x<globalPhotos.length; x++){
+
+					if(userId == globalPhotos[x].userId){
+						AlIndex.push(globalPhotos[x].id);
+					}
+				}
+				var AlLength = AlIndex.length;
+				for(var x = 0; x<AlLength; x++){
+					var y = 0
+					var bool = false;
+					var url;
+					while(!bool){
+						if(globalPhotos[y].albumId == AlIndex[x]){
+							url = globalPhotos[y].thumbnailUrl;
+							
+							bool = true;
+						}
+						y++;
+					}
+					container = $("<td>");
+					container.addClass("albumCol");
+					var text = "<img src=\"" + url + "\" style=\"width:150px;height:150px;\">"
+					image = $(text);
+					image.addClass("albumThumb");
+					image.val(globalAlbums[x].id);
+					container.append(image);
+					row.append(container);
+				}
+				table.append(row);
+				
+				$(".albumsContainer").append(table);
+			}
+			
+			function displayUserAlbum() {
+				var albumId = $(this).val();
+				var albumObj;
+				
+				for (var i = 0; i < globalAlbums.length; i++){
+					if (globalAlbums[i].id == albumId)
+						albumObj = globalAlbums[i];
+				}
+				
+				$(".albumsTitle").html("Albums > " + albumObj.title);
+				$("#albumTable").css({"opacity": "0", "transition": "opacity 0.5s ease 0s"})
+				setTimeout(function(){
+					$("#albumTable").css({"visilbility": "hidden"});
+				}, 500);
+				
+				//PhotoTableInAlbum(albumId);
+				
+			}
+			
+			$(document).on("click", "#main_container", goToProfile);
+			
+			//$("#post_container").scroll(disableHover);
+            
+			$(document).on("click", ".albumThumb", displayUserAlbum);
+			
+            $(document).on("click", "#showMoreP", nextTwelvePhotos);
+			$(document).on("click", "#showMore", nextTenPosts);
+			
+			$(document).on("mouseover", ".userName", hoverUser);
+			$(document).on("mouseout", ".userName", hoverUserOut);
+			
+			$(document).on("mouseover", ".post_item_container", revealSome);
+			$(document).on("mouseout", ".post_item_container", hideAll);
+			
+			$(document).on("mouseover", ".photosThumb", hoverOnPhoto);
+			$(document).on("mouseout", ".photosThumb", hoverOutPhoto);
+			$(document).on("click", ".photosThumb", displayPhotoInfo);
+			
+			$(document).on("click", ".post_item_container", function() {
+				if (!perma){
+					var text = globalPosts[$(this).val()-1].body;
+					$(".post_complete_content").html(text);
+					$(this).css("background", "red");
+					revealAll();
+					perma = true;
+				} else {
+					if ($(this).val() - 1 == id){
+						$(this).css("background", "yellow");
+						perma = false;
+						hideSome();
+					}
+
+				}
+			});
+			
+			$(document).on("click", ".userName", function(){
+				profState = 0;
+				goToProfile();
+			});
+			
+			$(document).on("mouseover", "#ALBUM", hoverAlbum);
+			$(document).on("mouseout", "#ALBUM", hoverOutAlbum);
+		
+			$(document).on("mouseover", "#MYPOSTS", hoverPosts);
+			$(document).on("mouseout", "#POSTS", hoverOutPosts);
+			
+			$(document).on("click", ".albumThumb", displayUserAlbum);
+			
+			$(document).on("click", "#ALBUM", goToAlbums);
+			$(document).on("click", "#MYPOSTS", goToMyPosts);
+			$(document).on("click", "#home_btn", function() {
+				if (profState == 1)
+					hideProfile();
+				else if (profState == 2)
+					hideAlbum();
+				else if (profState == 3)
+					hideMyPosts();
+				if (photos){
+					//$("#main_container").css({"width": "5px", "opacity": "0", "transition": "width 0.5s ease 0.5s, opacity 0.5s ease 0.5s"});
+					$("#PHOTOS").css({"opacity": "0", "transition": "opacity 0.5s ease"});
+					$(".photosLine").css({"width": "0px", "transition": "width 0.5s ease"});
+					hidePhotoInfo();
+					hidePhotoContainer();
+					setTimeout(resetToHome, 1000);
+				}
+				setTimeout(goToHome, 1000);
+			});
+			
+			$(document).on("click", "#photos_btn", goToPhotos);
+			
+		});
+		//JAROD END
+        //BY GARY
+        function nextTenPosts(){ 
+            var elem = document.getElementById('showMore');
+            elem.parentNode.removeChild(elem);
+            for(var x = globalX; x<globalX+10; x++){
+                var text = "<div value =\"" + globalPosts[99 - x].id + "\">";
+                var container = $(text);
+                container.addClass("post_item_container");
+                container.val(globalPosts[99 - x].id);
+                var userDP = $("<div>");
+                userDP.addClass("post_item_userdp");
+                var userName = $("<div>");
+                var y = globalPosts[99 - x].userId - 1;
+                userName.html(globalUser[y].username);
+                userName.addClass("post_item_name");
+                var title = $("<div>");
+                title.html(globalPosts[99 - x].title);
+                title.addClass("post_item_title")
+                container.append(userDP);
+                container.append(userName);
+                container.append(title);
+
+                $(".post_InContainer").append(container);
+            }
+            globalX += 10;
+            if(globalX < globalPosts.length){
+                var showMore = $("<input type =\"button\" onclick=\"nextTenPosts()\" id=\"showMore\" value=\"Show More...\">");
+                $(".post_InContainer").append(showMore);
+            }
+        }
+    </script>
+	
+	<body>
+		<!--Button Menu-->
+		<!--
+		<div class = "main_menu">
+			<table class = "menu_bar">
+				<tr>
+					<th><button class = "menu_btn">Home</button></th>
+					<th><button class = "menu_btn">Photos</button></th>
+					<th></th>
+				<tr>
+			</table>
+			<!--<button class = "menu_btn">All Photos</button>
+			<button class = "menu_btn">All Posts</button>
+			
+		</div>-->
+		<div>
+			<button class = "menu_btn" id = "home_btn">Home</button>
+			<button class = "menu_btn" id = "photos_btn">Photos</button>
+			<input type = "text" name = "search" placeholder = "Search..."></input>
+		</div>
+		
+		<!--
+		<div class = "main_menu">
+			<div class = "menu_btn_container">
+				<div class = "menu_btn">Home</div>
+			</div>
+		</div>
+		-->
+		
+	
+			<!--Post Container-->
+			<div id = "post_container">
+				<div class = "post_InContainer">
+				</div>
+			</div>
+			
+			<!--Post Complete-->
+			<div id = "main_container">
+				
+				<div class = "post_complete_dp"></div>
+				
+				<div class = "userName">
+					User Name
+				</div>	
+				
+				<div class = "post_complete_item">
+					
+					<div class = "line"></div>
+					<div class = "post_complete_content">
+						Post Content
+					</div>
+					
+				</div>
+				
+				<!--anj-->
+				<div id = "PROFILE">
+					<div class = "full_profile">
+						real name here
+					</div>
+                    <table class = "full_contact">
+                        <th id="address" class="contact">address here</th>
+                        <th id="company" class="contact">company here</th>
+                    </table>
+				</div>
+				<!--anj-->
+				
+				<div id = "PHOTOS">
+					<div class = "photos_Title">
+						Photos
+					</div>
+					<div class = "photosLine"></div>
+					<div class = "photosContainer">
+						<table id = "photosTable">
+							
+						</table>
+					</div>
+					
+					
+				</div>
+				
+				
+			</div>
+			
+			<div id = "photo_info">
+					<div class = "photo_img"></div>  <!-- Size is 600 x 600 -->
+					<div class = "photo_name">
+						Photo Name
+					</div>
+					
+					<div class = "photo_uploader">
+						User Name
+					</div>
+					<div class = "photo_album">
+						Name of Album
+					</div>
+			</div>
+			
+			<div id = "ALBUM">
+				<div class = "albumsTitle album">
+					Albums
+				</div>
+				<div class = "albumsLine"></div>
+				<div class = "albumsContainer">
+					<table id = "albumTable">
+					</table>
+				</div>
+				
+			</div>
+				
+			<div id = "MYPOSTS">
+				<div class = "myPostsTitle">
+					My Posts
+				</div>
+				<div class = "myPostsLine"></div>
+				<div id = "myPostsContainer">
+				</div>
+			</div>
+		
+       
+	</body>
+</html>
