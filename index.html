@@ -17,10 +17,10 @@
         var globalPhotos;
         var globalX;
         var globalPIndex;
-		$.ajax('http://jsonplaceholder.typicode.com/posts', {
+		$.ajax('https://jsonplaceholder.typicode.com/posts', {
 			method: 'GET'
 		}).then(function(posts) {
-			$.ajax('http://jsonplaceholder.typicode.com/users', {
+			$.ajax('https://jsonplaceholder.typicode.com/users', {
 				method: 'GET'
 			}).then(function(users) {
                 globalPosts = posts;
